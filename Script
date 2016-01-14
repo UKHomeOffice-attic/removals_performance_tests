@@ -1,0 +1,294 @@
+
+
+reg(char RegTxt[]){
+
+
+	web_reg_find(RegTxt, "SaveCount=Check_Count", "Search=ALL",	LAST);
+
+	web_reg_find("Text=500 Internal Server Error", "SaveCount=Error500_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=Oops! An Error Occurred", "SaveCount=Error_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=400 Bad Request", "SaveCount=Error400_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=401 Unauthorized", "SaveCount=Error401_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=403 Forbidden", "SaveCount=Error403_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=404 Not Found", "SaveCount=Error404_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=408 Request Timeout", "SaveCount=Error408_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=502 Bad Gateway", "SaveCount=Error502_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=503 Service Unavailable", "SaveCount=Error503_Count", "Search=ALL", LAST);
+
+	web_reg_find("Text=504 Gateway", "SaveCount=Error504_Count", "Search=ALL", LAST);
+
+	//web_reg_save_param("ErrorPage","LB=", "RB=","Search=Body", "RelFrameID=1", LAST);
+
+}
+
+	Validate_tx(char txName[]){
+	char ErrorTx[100];
+
+	if(atoi(lr_eval_string("{Check_Count}")) > 0){
+		lr_end_transaction(txName, LR_PASS);
+	}
+	else {
+		strcpy(ErrorTx,"ER_");
+		strcat(ErrorTx,txName);
+		if(atoi(lr_eval_string("{Error500_Count}")) > 0){
+			strcat(ErrorTx,"_Error500");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		if(atoi(lr_eval_string("{Error400_Count}")) > 0){
+			strcat(ErrorTx,"_Error400");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		if(atoi(lr_eval_string("{Error401_Count}")) > 0){
+			strcat(ErrorTx,"_Error401");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		if(atoi(lr_eval_string("{Error403_Count}")) > 0){
+			strcat(ErrorTx,"_Error403");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		if(atoi(lr_eval_string("{Error404_Count}")) > 0){
+			strcat(ErrorTx,"_Error404");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		if(atoi(lr_eval_string("{Error408_Count}")) > 0){
+			strcat(ErrorTx,"_Error408");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		if(atoi(lr_eval_string("{Error502_Count}")) > 0){
+			strcat(ErrorTx,"_Error502");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		if(atoi(lr_eval_string("{Error503_Count}")) > 0){
+			strcat(ErrorTx,"_Error503");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		if(atoi(lr_eval_string("{Error504_Count}")) > 0){
+			strcat(ErrorTx,"_Error504");
+		lr_end_transaction(txName, LR_FAIL);
+		//lr_error_message("TX %s Failed",ErrorTx);
+		lr_output_message("TX %s Failed",ErrorTx);
+		lr_start_transaction(ErrorTx);
+		lr_end_transaction(ErrorTx, LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+		else{
+		lr_end_transaction(txName, LR_FAIL);
+		lr_error_message("TX %s Failed - CheckCount %s",txName,lr_eval_string("{Check_Count}"));
+		lr_output_message("TX %s Failed - CheckCount %s",txName,lr_eval_string("{Check_Count}"));
+		lr_start_transaction("ER_Exit_000_UnKnowReason");
+		lr_end_transaction("ER_Exit_000_UnKnowReason", LR_PASS);
+		lr_exit(LR_EXIT_ITERATION_AND_CONTINUE,LR_FAIL);
+		}
+	}
+
+}
+
+
+
+
+Hearbeat()
+{
+
+	web_set_sockets_option("SSL_VERSION", "TLS1.2");
+
+	reg("Text=HTTP/1.1 200 OK");
+
+	lr_start_transaction("IRCBed_010_Post_Heartbeat");
+
+
+   web_custom_request("Heartbeat",
+        "URL=https://api-{BedURL}/irc_entry/heartbeat",
+        "Method=POST",
+        "Resource=0",
+        "EncType=application/json",
+        "Mode=HTTP",
+       "Body={\n  \"centre\": \"{CentreName}\",\n  \"male_occupied\": {Male_occupied},\n  \"female_occupied\": {Female_occupied},\n  \"male_outofcommission\": {Male_outofcommission},\n  \"female_outofcommission\": {Female_outofcommission}\n}\n",
+        LAST);
+
+	Validate_tx("IRCBed_010_Post_Heartbeat");
+
+	return 0;
+}
+
+
+Centre()
+{
+
+	web_set_sockets_option("SSL_VERSION", "TLS1.2");
+
+
+	reg("Text=HTTP/1.1 200 OK");
+
+	lr_start_transaction("IRCBed_020_Get_Centres_Update");
+
+
+   web_custom_request("Centre",
+        "URL=https://api-{BedURL}/centre",
+        "Method=GET",
+        "Resource=0",
+        "EncType=application/json",
+        "Mode=HTTP",
+        "Body={\"method\":\"get\",\"headers\":{},\"data\":{},\"url\":\"/centre\"}",
+        LAST);
+
+	Validate_tx("IRCBed_020_Get_Centres_Update");
+
+	return 0;
+}
+
+vuser_init()
+{
+	return 0;
+}
+
+
+Action()
+{
+	int rc = 0;
+	int i;
+	web_set_sockets_option("SSL_VERSION", "TLS1.2");
+
+//	web_add_cookie("_ga=GA1.3.1501477948.1452026846; DOMAIN=wallboard-{BedURL}");
+
+	web_url("wallboard-{BedURL}",
+		"URL=https://wallboard-{BedURL}/?backend=https://api-{BedURL}/",
+		"TargetFrame=",
+		"Resource=0",
+		"Referer=",
+		"Snapshot=t1.inf",
+		"Mode=HTML",
+		LAST);
+
+	web_add_cookie("_ga=GA1.3.1501477948.1452026846; DOMAIN=api-{BedURL}");
+
+	lr_think_time(5);
+
+
+
+
+	web_reg_save_param_regexp(
+		"ParamName=sid",
+		"RegExp=io=(.*?)\\\r\\\n",
+		SEARCH_FILTERS,
+		"Scope=Cookies",
+		"IgnoreRedirections=No",
+		"RequestUrl=*/socket.io/*",
+		LAST);
+
+	web_url("__getcookie",
+		"URL=https://api-{BedURL}/__getcookie",
+		"TargetFrame=",
+		"Resource=0",
+		"Referer=https://wallboard-{BedURL}/?backend=https://api-{BedURL}/",
+		"Snapshot=t2.inf",
+		"Mode=HTML",
+		EXTRARES,
+		"Url=/socket.io/?__sails_io_sdk_version=0.11.0&__sails_io_sdk_platform=browser&__sails_io_sdk_language=javascript&EIO=3&transport=polling&t=1452042048116-0", "Referer=https://wallboard-{BedURL}/?backend=https://api-{BedURL}/", ENDITEM,
+		LAST);
+
+
+	web_custom_request("socket.io",
+		"URL=https://api-{BedURL}/socket.io/?__sails_io_sdk_version=0.11.0&__sails_io_sdk_platform=browser&__sails_io_sdk_language=javascript&EIO=3&transport=polling&t=1452042048440-2&sid={sid}",
+		"Method=POST",
+		"TargetFrame=",
+		"Resource=0",
+		"RecContentType=text/html",
+		"Referer=https://wallboard-{BedURL}/?backend=https://api-{BedURL}/",
+		"Snapshot=t3.inf",
+		"Mode=HTML",
+		"EncType=text/plain;charset=UTF-8",
+		"Body=66:420[\"get\",{\"method\":\"get\",\"headers\":{},\"data\":{},\"url\":\"/centre\"}]",
+		LAST);
+
+	lr_think_time(2);
+
+	web_websocket_connect("ID={VUID}",
+		"URI=wss://api-{BedURL}/socket.io/?__sails_io_sdk_version=0.11.0&__sails_io_sdk_platform=browser&__sails_io_sdk_language=javascript&EIO=3&transport=websocket&sid={sid}",
+		"Origin=https://wallboard-{BedURL}",
+		"OnOpenCB=OnOpenCB0",
+		"OnMessageCB=OnMessageCB0",
+		"OnErrorCB=OnErrorCB0",
+		"OnCloseCB=OnCloseCB0",
+		LAST);
+
+	lr_think_time(2);
+
+	for(i=0;i<6;i++){
+
+		Hearbeat();
+
+		lr_think_time(5);
+
+	lr_start_transaction("IRCBED_100_Send_GetCentreUpdate_Msg_To_WebSocket");
+
+	rc = web_websocket_send("ID={VUID}",
+		"Buffer=5",
+		"IsBinary=0",
+		LAST);
+	lr_end_transaction("IRCBED_100_Send_GetCentreUpdate_Msg_To_WebSocket", LR_AUTO);
+
+		lr_think_time(15);
+
+		if(rc == 0){
+			Centre();
+			lr_think_time(10);
+		}else{
+
+			lr_exit(LR_EXIT_ITERATION_AND_CONTINUE, LR_PASS);
+		}
+	}
+
+	web_websocket_close("ID={VUID}",
+		"Code=1001",
+		LAST);
+
+	return 0;
+}
